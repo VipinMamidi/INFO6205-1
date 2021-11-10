@@ -15,15 +15,15 @@ import java.util.concurrent.ForkJoinPool;
  * TODO tidy it up a bit.
  */
 public class Main {
-
+    static ForkJoinPool fjp = new ForkJoinPool(32); //Added by Vipin
     public static void main(String[] args) {
         processArgs(args);
-        System.out.println("Degree of parallelism: " + ForkJoinPool.getCommonPoolParallelism());
+        System.out.println("Degree of parallelism: " + fjp.getParallelism());
         Random random = new Random();
-        int[] array = new int[2000000];
+        int[] array = new int[8000000];
         ArrayList<Long> timeList = new ArrayList<>();
-        for (int j = 50; j < 100; j++) {
-            ParSort.cutoff = 10000 * (j + 1);
+        for (double j = 0.1; j < 1; j+=0.1) { //changed boundaries
+            ParSort.cutoff = (int)Math.round(array.length*j); //changed cutoff
             // for (int i = 0; i < array.length; i++) array[i] = random.nextInt(10000000);
             long time;
             long startTime = System.currentTimeMillis();
@@ -36,7 +36,7 @@ public class Main {
             timeList.add(time);
 
 
-            System.out.println("cutoff：" + (ParSort.cutoff) + "\t\t10times Time:" + time + "ms");
+            System.out.println(/*"cutoff："*/ + (ParSort.cutoff) + "\t\t" + time /*+ "ms"*/);
 
         }
         try {
